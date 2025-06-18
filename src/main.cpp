@@ -2,25 +2,43 @@
 #include "actuatorController.h"
 
 // Define the Pin Numbers
-int ILI = 0; // Internal Logic Input
-int ELI = 1; // External Logic Input
-int potPin = 2; // Potentiometer Feedback Pin
 
-// Create an Instance of the ActuatorController Class
-ActuatorController actuatorController(potPin, ILI, ELI);
+// Left Actuator Pins (from the Perspective of the MCU)
+int RILI = 4; // Left Internal Logic Input
+int RELI = 5; // Left External Logic Input
+int RPotPin = 6; // Left Potentiometer Feedback Pin
+
+// Right Actuator Pins (from the Perspective of the MCU)
+int LILI = 9; // Right Internal Logic Input
+int LELI = 8; // Right External Logic Input
+int LPotPin = 7; // Right Potentiometer Feedback Pin
+
+// Create Instances of the Actuator Controller Class for the Left and Right Actuators
+ActuatorController leftActuatorController(LPotPin, LILI, LELI);
+ActuatorController rightActuatorController(RPotPin, RILI, RELI);
 
 void setup()
 {
 // Set the output pins
-pinMode(ILI, OUTPUT);
-pinMode(ELI, OUTPUT);
-pinMode(potPin, INPUT);
+
+// Left Actuator Pins (from the Perspective of the MCU)
+pinMode(LILI, OUTPUT);
+pinMode(LELI, OUTPUT);
+pinMode(LPotPin, INPUT);
+
+// Right Actuator Pins (from the Perspective of the MCU)
+pinMode(RILI, OUTPUT);
+pinMode(RELI, OUTPUT);
+pinMode(RPotPin, INPUT);
 
 Serial.begin(9600); // Start Serial Communication for Debugging
-actuatorController.setTargetPosition(50.0f); // Set the Target Position to 50mm
+leftActuatorController.setTargetPosition(180.0f); // Set the Left Actuator's Target Position
+rightActuatorController.setTargetPosition(180.0f); // Set the Right Actuator's Target Position
 }
 
 void loop()
 {
-
+leftActuatorController.update(); // Continuously Update the Left Actuator Controller
+rightActuatorController.update(); // Continuously Update the Right Actuator Controller
+delay(100);
 }
