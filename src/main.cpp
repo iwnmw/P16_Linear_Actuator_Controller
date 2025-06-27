@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "actuatorController.h"
+#include "mcp2515.h" // Include the MCP2515 library for CAN communication
 
 // Define the Pin Numbers
 
@@ -17,6 +18,12 @@ int LPotPin = 7; // Right Potentiometer Feedback Pin
 ActuatorController leftActuatorController(LPotPin, LILI, LELI);
 ActuatorController rightActuatorController(RPotPin, RILI, RELI);
 
+// Create Instance of the MCP2515 CAN Controller and Initialize
+MCP2515 mcp2515(10); // Assuming CS Pin is 10
+mcp2515.reset();
+mcp2515.setBitrate(CAN_125KBPS, MCP_8MHZ); // Set the CAN Bitrate to 125 kbps with a 8 MHz Clock
+mcp2515.setLoopbackMode();
+
 void setup()
 {
 // Set the output pins
@@ -32,8 +39,8 @@ pinMode(RELI, OUTPUT);
 pinMode(RPotPin, INPUT);
 
 Serial.begin(9600); // Start Serial Communication for Debugging
-leftActuatorController.setTargetPosition(180.0f); // Set the Left Actuator's Target Position
-rightActuatorController.setTargetPosition(180.0f); // Set the Right Actuator's Target Position
+leftActuatorController.setTargetPosition(100.0f); // Set the Left Actuator's Target Position
+rightActuatorController.setTargetPosition(100.0f); // Set the Right Actuator's Target Position
 }
 
 void loop()

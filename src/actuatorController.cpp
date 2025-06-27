@@ -4,6 +4,10 @@
 // Define Error Tolerance
 #define errorTolerance 1.0f // 5mm Tolerance for Position Control
 
+// Define Maximum Position and Minimum Position
+#define maxPosition 200.0f // Maximum Position in mm (Adjust if Stroke Length is Different)
+#define minPosition 1.0f // Measure Your Actuator's Extension when Fully Retracted to Improve Position Accuracy
+
 // ActuatorController class implementation
 
 ActuatorController::ActuatorController(int potPin, int ILI, int ELI)
@@ -24,7 +28,7 @@ float ActuatorController::readPosition() {
     // Read the potentiometer value and map it to a position in mm
     int potValue = analogRead(potPin);
     // Assuming the potentiometer gives a range of 0-1023 corresponding to 0-200mm
-    float position = map(potValue, 7, 1023, 1, 200); // Computed Some Calibration Constants in Matlab
+    float position = map(potValue, 7, 1023, minPosition, maxPosition); // Computed Some Calibration Constants in Matlab
     Serial.print("Potentiometer Feedback: ");
     Serial.println(potValue);
     Serial.print("Actuator Position: ");
